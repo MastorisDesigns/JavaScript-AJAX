@@ -1,0 +1,38 @@
+$('.eventlevel').on('click', function (e) {
+                e.preventDefault();
+                $('#breadcrumb').html($(this).parent().parent().parent().children('a').text() + " > " +  $(this).text());
+                lastAjaxCall = $(this);
+                $.ajax({
+                    type: "GET",
+                    url: "/Home/GetTasksForEventLevel",
+                    data: {
+                        EventLevelID: $(this).attr('data-EventLevelID')
+                    },
+                    success: function (eventLevel) {
+                        $('#tasks').html('&nbsp;');
+                        $.each(eventLevel.data, function (key, value) {
+                            var html = " <div class='dashbox col-lg-5 col-sm-5 col-xs-5'>";
+                            if (value.EventLevel == 3) {
+                                html += "<div class='green-circle'></div>";
+                            }
+                            else if (value.EventLevel == 2) {
+                                html += "<div class='yellow-circle'></div>";
+                            }
+                            else if (value.EventLevel == 1) {
+                                html += "<div class='red-circle'></div>";
+                            }
+                            else if (value.EventLevel == 4) {
+                                html += "<div class='grey-circle'></div>";
+                            }
+                            html += "<p class='bodytext'>" + value.EventDescription + "</p>";
+                            html += "<p class='bodytext'>Pending Items: (" + value.EventValue + ")</p>";
+                            html += "<p class='bodytext'>Last Updated: " + value.EventDateTimeText + "</p>";
+                            html += "<p><a href='#'>View History</a></p>";
+                            html += "<button data-MonitoringEventID='" + value.MonitoringEventID + "' class='raise'>Raise Alert</button>";
+                            html += "<button class='review'>Commit Review</button> </div>";
+                            $('#tasks').append(html);
+                        }); 
+                    }
+                });
+                return false;
+            });

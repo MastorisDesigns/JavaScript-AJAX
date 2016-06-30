@@ -1,0 +1,26 @@
+  var lastAjaxCall;
+  
+  function ajaxWrapper(obj) {
+    lastAjaxCall = obj;
+    $.ajax(obj);
+  } 
+  
+  function executeLastAjaxCall() {
+    if (lastAjaxCall) $.ajax(lastAjaxCall);
+  }
+  
+  $('#refresh').on('click', function (obj) {
+    if (lastAjaxCall) {
+    //$(this).button('loading');
+    executeLastAjaxCall();
+    //setTimeout(function () {
+    //    executeLastAjaxCall();
+    //}, 3000);
+    //$(this).button('reset');
+    
+    console.log(lastAjaxCall);
+    }
+    else{
+      window.location.reload();
+    }
+  });
